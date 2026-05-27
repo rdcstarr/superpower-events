@@ -53,20 +53,9 @@ Available listener traits (one per lifecycle hook):
 | `Concerns\ModelDeleting` | before `DELETE` |
 | `Concerns\ModelDeleted` | after `DELETE` |
 
-### 3. Register the listener in `EventServiceProvider`
+Each trait provides a typed `handle(EventClass $event)` method that filters by the model type declared on your `handleModel()` parameter. No manual `instanceof` check, no `$listen` array — Laravel 11+ auto-discovers the listener from the typed `handle()` signature.
 
-```php
-use App\Listeners\Users\AssignUserUuid;
-use Rdcstarr\SuperpowerEvents\Events\ModelCreated;
-
-protected $listen = [
-    ModelCreated::class => [
-        AssignUserUuid::class,
-    ],
-];
-```
-
-### 4. Pre-save mutations
+### 3. Pre-save mutations
 
 Pre-save listeners (`ModelCreating` / `ModelUpdating` / `ModelDeleting`) receive the model before the write — mutations applied inside `handleModel()` persist in the same `INSERT`/`UPDATE`:
 
